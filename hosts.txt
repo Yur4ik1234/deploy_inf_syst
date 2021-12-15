@@ -1,0 +1,13 @@
+
+[vmsc]
+vm1.deploy-vmsc-ubuntu.westeurope.cloudapp.azure.com
+vm3.deploy-vmsc-ubuntu.westeurope.cloudapp.azure.com
+vm0.deploy-vmsc-ubuntu.westeurope.cloudapp.azure.com
+vm2.deploy-vmsc-ubuntu.westeurope.cloudapp.azure.com
+
+
+
+[vmsc:vars]
+ansible_ssh_user=adminuser 
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_python_interpreter= /usr/bin/python3

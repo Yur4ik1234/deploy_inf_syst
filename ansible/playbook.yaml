@@ -1,0 +1,47 @@
+- name: Deploying service
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+
+  - name: Installing aptitude for docker
+    apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+  - name: Installing system packages
+    apt: name={{ item }} state=latest update_cache=yes
+    loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu xenial stable
+      state: present
+
+  - name: Installing docker-ce
+    apt: update_cache=yes name=docker-ce state=latest
+
+  - name: Installing docker for python
+    pip:
+      name: docker
+  
+  - name: Pulling Docker image 
+    docker_image:
+      name: yeasy/simple-web
+      source: pull
+
+
+  - name: Create container
+    community.docker.docker_container:
+      name: container-1
+      image: yeasy/simple-web
+      state: started
+      auto_remove: true 
+      ports:
+      - "80:80"
+    with_sequence: count=1
+
+     
